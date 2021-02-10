@@ -1,0 +1,43 @@
+version: '3.3'
+services:
+  catalog-db:
+    image: mysql:8.0.19
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'catalog-db'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3606:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3606'
+      # Where our data will be persisted
+    volumes:
+      - catalog-db:/var/lib/mysql
+      -
+  catalog-elasticsearch:
+    image: elasticsearch:7.9.3
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      ulimits:
+        memlock:
+          soft: -1
+          hard: -1
+      volumes:
+        - elasticsearchData:/usr/share/elasticsearch/data
+      ports:
+        - 9200:9200
+
+# Names our volume
+volumes:
+  catalog-db:
+  elasticsearchData:
+
