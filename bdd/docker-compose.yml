@@ -20,21 +20,21 @@ services:
       # Where our data will be persisted
     volumes:
       - catalog-db:/var/lib/mysql
-      -
+      
   catalog-elasticsearch:
-    image: elasticsearch:7.9.3
+    image: elasticsearch:7.12.0
     environment:
-      - node.name=es01
-      - cluster.name=es-docker-cluster
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      ulimits:
-        memlock:
-          soft: -1
-          hard: -1
-      volumes:
-        - elasticsearchData:/usr/share/elasticsearch/data
-      ports:
-        - 9200:9200
+       - node.name=es01
+       - cluster.name=es-docker-cluster
+       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearchData:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
 
 # Names our volume
 volumes:

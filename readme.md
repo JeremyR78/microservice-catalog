@@ -9,9 +9,9 @@ Le service doit gérer les fonctionnalités de base d'un catalogue d'e-commerce 
 - gestion de differentes monnaies
 - gestion de taxes
 - gestion des propriétés produits
-- gestion des différents types d'utilisateurs
-- gestion asynchrone des données entre une base SQL à NoSQL
-- des tests unitaires et d'intégrations 
+- gestion des différents types d'utilisateurs (B2C, B2B)
+- gestion asynchrone des données entre une base SQL (MySQL) à NoSQL (Elasticsearch)
+- des tests unitaires et d'intégrations (Gitlab-ci)
 - configuration complète via une API REST
 
 

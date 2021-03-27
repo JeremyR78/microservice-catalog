@@ -18,9 +18,9 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@RunWith(SpringRunner.class)
-@Transactional
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@Transactional
+//@SpringBootTest
 public class LanguageServiceTest {
 
     // --------------------------------------
@@ -35,13 +35,13 @@ public class LanguageServiceTest {
     // -        Methods                     -
     // --------------------------------------
 
-    @Before
+    //@Before
     public void setUp() {
 
     }
 
 
-    @Test
+    //@Test
     public void test1_create_and_find() {
 
         //  -   INIT

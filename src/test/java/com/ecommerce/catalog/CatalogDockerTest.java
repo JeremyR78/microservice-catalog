@@ -52,6 +52,7 @@ import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -280,10 +281,10 @@ public class CatalogDockerTest {
         String host = ELASTICSEARCH_CONTAINER.getHttpHostAddress();
         List<Node> nodes = this.clientEs.getLowLevelClient().getNodes();
         nodes.forEach( node -> {
-            Assert.assertEquals( host , node.getHost().toHostString() );
+            Assertions.assertEquals( host , node.getHost().toHostString() );
         });
         boolean response = this.clientEs.ping( RequestOptions.DEFAULT );
-        Assert.assertTrue( response );
+        Assertions.assertTrue( response );
     }
 
     @DisplayName("Create a new language from the REST API")
@@ -1294,7 +1295,7 @@ public class CatalogDockerTest {
     }
 
     @DisplayName("Get the product Elasticsearch from the REST API")
-    @Test
+    //@Test
     @Order(101)
     public void get_product_view_by_api_rest() throws Exception {
 
