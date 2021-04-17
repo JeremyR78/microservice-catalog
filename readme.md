@@ -1,5 +1,7 @@
-# Microservice Catalogue
+[![coverage report](https://gitlab.local.com/jeremy/microservice-catalog/badges/master/coverage.svg)](https://gitlab.local.com/jeremy/microservice-catalog/-/commits/master)
+[![pipeline status](https://gitlab.local.com/jeremy/microservice-catalog/badges/master/pipeline.svg)](https://gitlab.local.com/jeremy/microservice-catalog/-/commits/master)
 
+# Microservice Catalogue
 
 Gestion d'un catalogue de produits pour une plateforme d'e-commerce from scratch.
 

@@ -7,17 +7,24 @@ variables:
 stages:
   - build-unit-tests
   - build-integration-tests
-  - coverage-report
   - package
+  - deploy
 
 test-junit:
   image: maven:3.6-openjdk-11-slim
   stage: build-unit-tests
-  script: "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dtest=PromotionTest,ProductTest,PropertyTest,MapperProductServiceTests jacoco:report"
+  script:
+    - "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dtest=PromotionTest,ProductTest,PropertyTest,MapperProductServiceTests jacoco:report"
+    - cat target/site/jacoco/index.html
   artifacts:
     paths:
       - target/*.jar
+      - target/surefire-reports/TEST-*.xml
       - target/site/jacoco/jacoco.xml
+      - target/site/jacoco/index.html
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
   tags:
     - kubernetes
 
@@ -50,26 +57,25 @@ docker-build:
     - docker info
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build -t $CI_REGISTRY/$DOCKER_PROJECT_PATH:$DOCKER_TAG .
+    - docker build --build-arg JAR_FILE=target/*.jar -t $CI_REGISTRY/$DOCKER_PROJECT_PATH:$DOCKER_TAG .
     - docker push $CI_REGISTRY/$DOCKER_PROJECT_PATH:$DOCKER_TAG
 
-coverage-report:
-  # Must be in a stage later than test-jdk11's stage.
-  # The `visualize` stage does not exist by default.
-  # Please define it first, or chose an existing stage like `deploy`.
-  stage: coverage-report
-  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
+
+deploy-recette:
   tags:
     - kubernetes
+  image: bitnami/kubectl:latest
+  stage: deploy
+  when: manual
   script:
-    # convert report from jacoco to cobertura
-    - 'python /opt/cover2cover.py target/site/jacoco/jacoco.xml src/main/java > target/site/cobertura.xml'
-    # read the <source></source> tag and prepend the path to every filename attribute
-    - 'python /opt/source2filename.py target/site/cobertura.xml'
-  needs: ["test-junit"]
-  dependencies:
-    - test-junit
-  artifacts:
-    reports:
-      cobertura: target/site/cobertura.xml
+    - kubectl apply -f deployment.yml -n ecommerce-recette
+
+deploy-prod:
+  tags:
+    - kubernetes
+  image: bitnami/kubectl:latest
+  stage: deploy
+  when: manual
+  script:
+    - kubectl apply -f deployment.yml -n ecommerce
 
